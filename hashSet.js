@@ -39,7 +39,7 @@ class HashSet {
     set(key) {
         let hashCode = this.hash(key);
 
-        if (hashCode < 0 || hashCode >= buckets.length) {
+        if (hashCode < 0 || hashCode >= this.keySet.length) {
             throw new Error('Trying to access index out of bound');
         }
 
@@ -76,7 +76,7 @@ class HashSet {
     remove(key) {
         let hashCode = this.hash(key);
 
-        if (hashCode < 0 || hashCode >= buckets.length) {
+        if (hashCode < 0 || hashCode >= this.keySet.length) {
             throw new Error('Trying to access index out of bound');
         }
 
