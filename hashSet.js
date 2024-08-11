@@ -1,125 +1,125 @@
 class HashSet {
-    constructor(size = 16) {
-        this.size = size;
-        this.keySet = Array.from({ length: size }, () => []);
-        this.count = 0;
+  constructor(size = 16) {
+    this.size = size;
+    this.keySet = Array.from({ length: size }, () => []);
+    this.count = 0;
+  }
+
+  hash(key) {
+    let hashCode = 0;
+    const primeValue = 31;
+
+    for (let i = 0; i < key.length; i++) {
+      hashCode = (primeValue * hashCode + key.charCodeAt(i)) % this.size;
     }
 
-    hash(key) {
-        let hashCode = 0;
-        let primeValue = 31;
+    return hashCode;
+  }
 
-        for (let i = 0; i < key.length; i++) {
-            hashCode = (primeValue * hashCode + key.charCodeAt(i)) % this.size;
+  loadFactor() {
+    return this.count / this.size;
+  }
+
+  resize() {
+    this.size *= 2;
+
+    const oldKeySet = this.keySet;
+    this.keySet = Array.from({ length: this.size }, () => []);
+    this.count = 0;
+
+    for (const bucket of oldKeySet) {
+      if (bucket) {
+        for (const key of bucket) {
+          this.set(key);
         }
+      }
+    }
+  }
 
-        return hashCode;
+  set(key) {
+    const hashCode = this.hash(key);
+
+    if (hashCode < 0 || hashCode >= this.keySet.length) {
+      throw new Error('Trying to access index out of bound');
     }
 
-    loadFactor() {
-        return this.count / this.size;
+    let keyExists = false;
+    for (let i = 0; i < this.keySet[hashCode].length; i++) {
+      if (this.keySet[hashCode][i][0] === key) {
+        keyExists = true;
+        break;
+      }
     }
 
-    resize() {
-        this.size = this.size * 2;
+    if (!keyExists) {
+      this.keySet[hashCode].push(key);
+      this.count += 1;
 
-        const oldKeySet = this.keySet;
-        this.keySet = Array.from({ length: this.size }, () => []);
-        this.count = 0;
+      if (this.loadFactor() > 0.75) {
+        this.resize();
+      }
+    }
+  }
 
-        for (const bucket of oldKeySet) {
-            if (bucket) {
-                for (let key of bucket) {
-                    this.set(key);
-                }
-            }
-        }
+  has(key) {
+    const hashCode = this.hash(key);
+
+    for (let i = 0; i < this.keySet[hashCode].length; i++) {
+      if (this.keySet[hashCode][i] === key) {
+        return true;
+      }
     }
 
-    set(key) {
-        let hashCode = this.hash(key);
+    return false;
+  }
 
-        if (hashCode < 0 || hashCode >= this.keySet.length) {
-            throw new Error('Trying to access index out of bound');
-        }
+  remove(key) {
+    const hashCode = this.hash(key);
 
-        let keyExists = false;
-        for (let i = 0; i < this.keySet[hashCode].length; i++) {
-            if (this.keySet[hashCode][i][0] === key) {
-                keyExists = true;
-                break;
-            }
-        }
-
-        if (!keyExists) {
-            this.keySet[hashCode].push(key);
-            this.count += 1;
-
-            if (this.loadFactor() > 0.75) {
-                this.resize();
-            }
-        }
+    if (hashCode < 0 || hashCode >= this.keySet.length) {
+      throw new Error('Trying to access index out of bound');
     }
 
-    has(key) {
-        let hashCode = this.hash(key);
-
-        for (let i = 0; i < this.keySet[hashCode].length; i++) {
-            if (this.keySet[hashCode][i] === key) {
-                return true;
-            }
-        }
-
-        return false;
+    for (let i = 0; i < this.keySet[hashCode].length; i++) {
+      if (this.keySet[hashCode][i] === key) {
+        this.keySet[hashCode].splice(i, 1);
+        this.count -= 1;
+        return true;
+      }
     }
 
-    remove(key) {
-        let hashCode = this.hash(key);
+    return false;
+  }
 
-        if (hashCode < 0 || hashCode >= this.keySet.length) {
-            throw new Error('Trying to access index out of bound');
-        }
+  length() {
+    return this.count;
+  }
 
-        for (let i = 0; i < this.keySet[hashCode].length; i++) {
-            if (this.keySet[hashCode][i] === key) {
-                this.keySet[hashCode].splice(i, 1);
-                this.count -= 1;
-                return true;
-            }
-        }
+  clear() {
+    this.size = 16;
+    this.keySet = Array.from({ length: this.size }, () => []);
 
-        return false;
+    this.count = 0;
+  }
+
+  entries() {
+    const keysArray = [];
+
+    for (const bucket of this.keySet) {
+      for (const key of bucket) {
+        keysArray.push(key);
+      }
     }
 
-    length() {
-        return this.count;
+    return keysArray;
+  }
+
+  display() {
+    console.log('HashSet contents:');
+    for (let i = 0; i < this.size; i++) {
+      if (this.keySet[i] && this.keySet[i].length > 0) {
+        console.log(`Bucket ${i}:`, this.keySet[i]);
+      }
     }
-
-    clear() {
-        this.size = 16;
-        this.keySet = Array.from({ length: this.size }, () => []);
-
-        this.count = 0;
-    }
-
-    entries() {
-        let keysArray = [];
-
-        for (const bucket of this.keySet) {
-            for (const key of bucket) {
-                keysArray.push(key);
-            }
-        }
-
-        return keysArray;
-    }
-
-    display() {
-        console.log('HashSet contents:');
-        for (let i = 0; i < this.size; i++) {
-            if (this.keySet[i] && this.keySet[i].length > 0) {
-                console.log(`Bucket ${i}:`, this.keySet[i]);
-            }
-        }
-    }
+  }
 }
