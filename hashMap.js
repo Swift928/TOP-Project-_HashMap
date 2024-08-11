@@ -143,16 +143,7 @@ class HashMap {
     }
 
     entries() {
-        const entries = [];
-
-        for (let bucket of this.keyMap) {
-            if (bucket) {
-                for (let entry of bucket) {
-                    entries.push(entry);
-                }
-            }
-        }
-        return entries;
+        return this.keyMap.flatMap((bucket) => bucket || []);
     }
 
     display() {

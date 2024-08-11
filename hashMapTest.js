@@ -15,7 +15,7 @@ test.set('jacket', 'blue');
 test.set('kite', 'pink');
 test.set('lion', 'golden');
 
-console.log(test.length());
+// console.log(test.length());
 
 test.set('jacket', 'Chief');
 test.set('kite', 'Swift');
@@ -24,14 +24,14 @@ test.set('lion', 'MacBook');
 test.set('moon', 'silver');
 
 console.log(test.entries());
-console.log(test.values());
+// console.log(test.values());
 
-console.log(test.length());
+// console.log(test.length());
 
-test.display();
+// test.display();
 
-test.set('Chief', 'silver');
-test.set('BlACK', 'silver');
-test.set('4Ever', 'silver');
+// test.set('Chief', 'silver');
+// test.set('BlACK', 'silver');
+// test.set('4Ever', 'silver');
 
-test.display();
+// test.display();
