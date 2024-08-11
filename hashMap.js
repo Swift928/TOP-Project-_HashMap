@@ -38,6 +38,10 @@ class HashMap {
     set(key, value) {
         let hashCode = this.hash(key);
 
+        if (hashCode < 0 || hashCode >= buckets.length) {
+            throw new Error('Trying to access index out of bound');
+        }
+
         let keyExists = false;
         for (let i = 0; i < this.keyMap[hashCode].length; i++) {
             if (this.keyMap[hashCode][i][0] === key) {
@@ -61,6 +65,10 @@ class HashMap {
     get(key) {
         let hashCode = this.hash(key);
 
+        if (hashCode < 0 || hashCode >= buckets.length) {
+            throw new Error('Trying to access index out of bound');
+        }
+
         if (this.keyMap[hashCode]) {
             for (let i = 0; i < this.keyMap[hashCode].length; i++) {
                 if (this.keyMap[hashCode][i][0] === key) {
@@ -78,6 +86,10 @@ class HashMap {
 
     remove(key) {
         let hashCode = this.hash(key);
+
+        if (hashCode < 0 || hashCode >= buckets.length) {
+            throw new Error('Trying to access index out of bound');
+        }
 
         for (let i = 0; i < this.keyMap[hashCode].length; i++) {
             if (this.keyMap[hashCode][i][0] === key) {

@@ -39,6 +39,10 @@ class HashSet {
     set(key) {
         let hashCode = this.hash(key);
 
+        if (hashCode < 0 || hashCode >= buckets.length) {
+            throw new Error('Trying to access index out of bound');
+        }
+
         let keyExists = false;
         for (let i = 0; i < this.keySet[hashCode].length; i++) {
             if (this.keySet[hashCode][i][0] === key) {
@@ -71,6 +75,10 @@ class HashSet {
 
     remove(key) {
         let hashCode = this.hash(key);
+
+        if (hashCode < 0 || hashCode >= buckets.length) {
+            throw new Error('Trying to access index out of bound');
+        }
 
         for (let i = 0; i < this.keySet[hashCode].length; i++) {
             if (this.keySet[hashCode][i] === key) {
